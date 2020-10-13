@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\htclianxi\\test"
+		},
+		{
+			"path": "..\\..\\..\\htclianxi\\nodetest"
+		},
+		{
+			"path": "..\\.."
+		},
+		{
+			"path": "..\\..\\vue"
+		},
+		{
+			"path": "..\\..\\..\\htclianxi\\webpack-demos"
+		},
+		{
+			"path": "..\\..\\..\\htclianxi\\基础练习"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
