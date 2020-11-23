@@ -38,6 +38,25 @@
     <tabbar />
     </template>
 
+     <popup :shows="box_show">
+            <div class="white-box">
+                <div class="title">
+                    沪上云拍
+                </div>
+                <div class="neirong">
+                  尊敬的会员您好：平台为增加新注册用户的交易体验，特免去首单交易服务费（仅限首单）有效期为新用户注册时
+
+                  <span class="red">{{data.day}}</span>
+                  日内。祝您交易愉快！
+                </div>
+                <div class="butn-box">
+                    <div class="butn1" @click="queren()">
+                        确认
+                    </div>
+                </div>
+            </div>
+        </popup>
+
     
     
     <!-- <template v-else>
@@ -51,12 +70,19 @@
 <script>
 export default {
   created() {
-    
+    console.clear()
+    console.log(document.baseURI)
     console.log(this.$route)
+   
+
     this.getdata()
+  },
+  setup(){
+    console.log('setup')
   },
 data(){
   return{
+    box_show:false,
     data:{},
     nav_list:[
       {
@@ -83,6 +109,9 @@ data(){
   }
 },
 methods: {
+  queren(){
+    this.box_show=false
+  },
   goDetail(item){
     this.$router.push('/shop_list?id='+item.id)
   },
@@ -91,6 +120,11 @@ methods: {
       url:'index/auction_goods/index'
     }).then(res=>{
       this.data=res
+       if(this.data.day){
+         this.box_show=true
+       }else{
+         this.box_show=false
+       }
        console.log(res)
     })
   },
@@ -104,6 +138,53 @@ methods: {
 </script>
 
 <style lang="scss" scoped>
+.red{
+  color: red !important;
+}
+.white-box{
+    background: white;
+    border-radius: 10px;
+    margin: auto 20px;
+    box-sizing: border-box;
+    padding: 60px 25px 20px 25px;
+    .title{
+        border: none;
+        color: #000;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        margin: 0 0 20px 0;
+    }
+    .neirong{
+        color: #999;
+        font-size: 14px;
+        margin: 0 0 25px 0;
+    }
+    .checkbox{
+        margin: 0 0 30px 0;
+    }
+    .butn-box{
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0 0 0;
+        div{
+            flex: 1;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+        }
+    }
+    .butn1{
+        margin: 0 10px 0 0;
+        background: #4fc08d;
+    }
+    .butn2{
+        background: rgb(83,160,80);
+    }
+}
 .loadding-box{
   width: 500px;
   height: 500px;

@@ -17,8 +17,10 @@ document.addEventListener('plusready', () =>{
 	   Vue.prototype.app_v=wgtStr
 	});
 },false); 
- 
-export const baseUrl='http://www.fulioet.cn/'
+
+// export const baseUrl='http://www.bmwoezc.cn/'
+export const baseUrl='http://qq.bmwoezc.cn/'
+// export const baseUrl='http://rs.com/'
 // export const baseUrl='http://192.168.2.124/'
 
 Vue.prototype.baseUrl=baseUrl
@@ -95,6 +97,7 @@ Vue.prototype.ajax=({url,data={},headers={},methods='post'})=>{
             err(res.data)
             return
         }
+        console.log(res)
        
         if(res.data.msg=='用户不存在'){
             Vue.prototype.showtitle('请重新登录')
@@ -102,6 +105,7 @@ Vue.prototype.ajax=({url,data={},headers={},methods='post'})=>{
             router.push('/login')
             return
         }
+        console.log(res.data.message)
         Toast.fail(res.message||res.msg||res.data.message||res.data.msg)
         err(res)
       }
@@ -121,6 +125,7 @@ import 'babel-polyfill';
 
 import Vant from 'vant';
 import 'vant/lib/index.css';
+
 
 import NutUI from '@nutui/nutui';
 import '@nutui/nutui/dist/nutui.css';

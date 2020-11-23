@@ -221,7 +221,7 @@
                         </van-radio-group>
                     </div>
                 </div>
-                <div class="img-item" v-if="radio==2">
+                <div class="img-item" v-if="radio==1">
                     <div class="left">
                         备注
                     </div>
@@ -247,9 +247,9 @@
                 </div>
 
                 <div class="neirong">
-                   诺核对是否已收到相关款项，点击
+                   请核对是否已收到相关款项，点击
                     确认故货后，均视为已收到款，如
-                未收到款，却点击了放货的，由.
+                未收到款，却点击了放货的，
                 产生的损失由卖家自行承担!!
                 </div>
                 <div class="chechbox">

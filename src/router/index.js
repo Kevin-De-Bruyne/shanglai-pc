@@ -38,7 +38,8 @@ import shiming from '../pages/shiming'
 import shenhe from '../pages/shenhe'
 import xiazai from '../pages/xiazai'
 import order_detail from '../pages/order_detail'
-import order_detail_sell from '../pages/order_detail_sell'
+import order_detail_sell from '@/pages/order_detail_sell'
+import test from '@/pages/test'
 
 Vue.use(Router)
 
@@ -307,6 +308,13 @@ export default new Router({
         {
           path:'/pwd_jiaoyi',
           component:pwd_jiaoyi,
+          meta:{
+            index:2
+          }
+        },
+        {
+          path:'/test',
+          component:test,
           meta:{
             index:2
           }

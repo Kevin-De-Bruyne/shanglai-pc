@@ -18,7 +18,7 @@
                 库号: {{data.w_num}}
             </div>
             <div class="right">
-                规格:1
+                规格:{{data.spec}}
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@ export default {
                     this.$router.replace('/order_buy')
                 })
             }).catch(err=>{
-               
+               this.showtitle(err.message||err.data.message)
             })
         },
         getdata(){
@@ -149,6 +149,8 @@ export default {
 .content{
     min-height: 100vh;
     background: rgb(237,243,245);
+    box-sizing: border-box;
+    padding: 50px 0 80px 0;
 }
 .white-box{
     background: white;
@@ -178,8 +180,8 @@ export default {
         height: 300px;
         
         img{
-            height: 100%;
-            max-width: 100vw;
+            max-width: 100%;
+            max-height: 100%;
             // width: 100%;
             margin: auto;
         }

@@ -4,7 +4,7 @@ module.exports={
     css: {
         // loaderOptions: {
         //   postcss: {
-        //     plugins: [
+        //     plugins: [ 
         //       require('postcss-plugin-px2rem')({
         //         selectorBlackList: ['norem'],
         //         rootValue:37.5,      // 新版本的是这个值

@@ -13,14 +13,13 @@
                  </div>
                  <div class="right">
                      <span v-if="item.name=='我的买单'">
-                         待处理 : <span :class="{'red':data.buy_order_num}">{{data.buy_order_num}}</span>
+                         <span :class="{'red':data.buy_order_num}"> 待处理 :{{data.buy_order_num}}</span>
                      </span>
                      <span v-if="item.name=='我的卖单'">
-                         待处理 : <span :class="{'red':data.sell_order_num}">{{data.sell_order_num}}</span>
+                           <span :class="{'red':data.sell_order_num}">待处理:{{data.sell_order_num}}</span>
                      </span>
                      <span v-if="item.name=='提货订单'">
-                         
-                         待处理 : <span :class="{'red':data.up_order_num}">{{data.up_order_num}}</span>
+                          <span :class="{'red':data.up_order_num}">待处理 :{{data.up_order_num}}</span>
                      </span>
                      <span class="iconfont icon-iconfontjiantou3"></span>
                  </div>

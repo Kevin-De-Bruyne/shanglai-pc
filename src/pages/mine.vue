@@ -216,7 +216,10 @@ export default {
             })
         },
         choise_img(){
-            this.$refs.header_img.chooseFile()
+            this.header_img.shift()
+            this.$nextTick(()=>{
+                this.$refs.header_img.chooseFile()
+            })
         },
         confirm(){
             console.log(this.nickname)

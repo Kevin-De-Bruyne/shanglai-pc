@@ -1,7 +1,7 @@
 <template>
 <div class="download">
 	<img src="../assets/download.png" v-show="wx" class="downloadimg" alt="">
-	<div class="logo"><img src="http://www.fulioet.cn/vue/logo.png"></div>
+	<div class="logo"><img src="../assets/logo (2).png"></div>
 	<!-- <switchr title="关于抖赞" type='back'/> -->
 	<div @click="btns" class="downbtn">Android版下载</div>
 	<!-- <div @click="btnios" class="downbtn">Ios版下载</div> -->

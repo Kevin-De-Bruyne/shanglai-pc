@@ -148,24 +148,6 @@
                 微信
                 </div>
                 <div class="container">
-                    <!-- <div class="left-box">
-                        <div class="text1">
-                           <div class="left">
-                               账号类型
-                           </div>
-                           <div class="right">
-                               支付宝
-                           </div>
-                        </div>
-                        <div class="text2">
-                            <div class="left">
-                                账号姓名
-                            </div>
-                            <div class="right">
-                                末秋的一朵海棠花
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="right-box" @click="img_show2=true">
                         <img :src="data.info.wechat" alt="">
                     </div>

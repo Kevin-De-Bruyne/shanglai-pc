@@ -244,7 +244,7 @@ export default {
   });
   return
                 }
-                this.active++
+                this.active++   
                 this.steps.scrollTo(150*this.active,0)
                 return
             }

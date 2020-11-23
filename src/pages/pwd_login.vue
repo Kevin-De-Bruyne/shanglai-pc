@@ -11,11 +11,8 @@
                 {{codetext}}
             </div>
         </div>
-        <!-- <div class="ipt-box">
-            <input type="password" v-model="user.oldpassword" placeholder="请输入旧登录密码">
-        </div> -->
         <div class="ipt-box">
-            <input type="password" v-model="user.password" placeholder="请输入登录密码">
+            <input type="password" v-model="user.password" placeholder="请输入新的登录密码">
         </div>
         <div class="ipt-box">
             <input type="password" v-model="user.password2" placeholder="请确认登录密码">
@@ -38,10 +35,10 @@ export default {
     methods: {
         submit(){
             let {user}=this
-            if(!user.oldpassword){
-                this.showtitle('请输入旧密码')
-                return
-            }
+            // if(!user.oldpassword){
+            //     this.showtitle('请输入旧密码')
+            //     return
+            // }
             if(!user.code){
                 this.showtitle('请输入验证码')
                 return
@@ -55,11 +52,11 @@ export default {
                 return
             }
             this.ajax({
-                url:'index/my/edit',
+                url:'index/publics/changeSave',
                 data:{
-                    key:'password',
-                    old_pwd:user.oldpassword,
-                    value:user.password
+                    mobile:this.user.phone,
+                    new_pwd:user.password,
+                    phone_code:user.code
                 }
             }).then(res=>{
                 this.showtitle('修改成功').then(res=>{
@@ -73,10 +70,14 @@ export default {
             if(this.codetext!='获取验证码'){
                 return
             }
+            if(!this.user.phone){
+                this.showtitle('请输入手机号')
+                return
+            }
              this.ajax({
-                url:'index/publics/send',
+                url:'index/publics/send_upd_pwd',
                 data:{
-                    mobile:user.phone
+                    mobile:this.user.phone
                 }
             }).then(res=>{
                 this.codetext=60

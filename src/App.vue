@@ -99,10 +99,6 @@ export default {
   color: red !important;
 }
 }
-img{
-  max-width: 100%;
-  max-height: 100%;
-}
 .bottom{
   position: static !important;
   z-index: 0 !important;

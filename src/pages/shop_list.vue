@@ -71,10 +71,8 @@ export default {
         }
     },
     created () {
-      
-    
      this.getdata('init')
-     
+     this.getuser()
      console.log(this.page_arr)
     },
     watch: {
@@ -82,6 +80,8 @@ export default {
             console.log(news)
             this.getdata()
         }
+    },
+    mounted() {
     },
     methods: {
         getdata(init){
@@ -106,8 +106,27 @@ export default {
             }).catch(err=>{
                 console.log(err)
                 this.showtitle(err.message||err.data.message).then(res=>{
-                    // this.$router.go(-1)
+                    
                 })
+            })
+        },
+         getuser(){
+            this.ajax({
+                url:'index/my/user_info'
+            }).then(res=>{
+                if(res.user.is_certification){
+                    return
+                }
+                   this.$dialog.confirm({
+                    title: '提示',
+                    message: '依《沪上云拍》相关要求，会员必须实名认证才可进行购买。',
+                    })
+                    .then(() => {
+                        this.$router.push('/wanshan')
+                    })
+                    .catch(() => {
+                        // on cancel
+                    });
             })
         },
         shop_list(item){
@@ -120,28 +139,17 @@ export default {
         page_up(){
             if(this.zong_arr.length>=5){
                 this.page_arr=[1,2,3,4,5]
-                this.page_index=1
-            }else{
-                this.page_index=1
-                this.page=1
-                this.getdata()
                 
-                console.log(this.$refs['item-box'])
             }
-            
+            this.page_index=1
+                this.page=1
         },
         page_down(){
-            
             let {zong_arr,page_arr}=this
-            if(zong_arr.length>=5){
-                this.page_arr=[zong_arr.length-4,zong_arr.length-3,page_arr.length-2,page_arr.length-1,page_arr.length]
-            this.page_index=zong_arr.length
-            }else{
-                this.page_index=this.zong_arr.length
+             this.page_arr=[zong_arr.length-4,zong_arr.length-3,zong_arr.length-2,zong_arr.length-1,zong_arr.length]
+             console.log([zong_arr.length-4,zong_arr.length-3,zong_arr.length-2,zong_arr.length-1,zong_arr.length])
+            this.page_index=this.zong_arr.length
                 this.page=this.zong_arr.length
-                this.getdata()
-            }
-            
         },
         changePage(index){
 
@@ -255,8 +263,8 @@ export default {
                    margin: auto;
                 //   height: 150px;
                 //  width: 150px;
-                 max-width: 100%;
-                 max-height: 100%;
+                //  max-width: 100%;
+                //  max-height: 100%;
                }
            }
            .bottom{
