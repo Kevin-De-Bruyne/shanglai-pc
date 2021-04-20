@@ -119,7 +119,7 @@ export default {
                 }
                    this.$dialog.confirm({
                     title: '提示',
-                    message: '依《沪上云拍》相关要求，会员必须实名认证才可进行购买。',
+                    message: '依《尚来拍卖》相关要求，会员必须实名认证才可进行购买。',
                     })
                     .then(() => {
                         this.$router.push('/wanshan')
@@ -145,9 +145,11 @@ export default {
                 this.page=1
         },
         page_down(){
+            
             let {zong_arr,page_arr}=this
-             this.page_arr=[zong_arr.length-4,zong_arr.length-3,zong_arr.length-2,zong_arr.length-1,zong_arr.length]
-             console.log([zong_arr.length-4,zong_arr.length-3,zong_arr.length-2,zong_arr.length-1,zong_arr.length])
+            if(this.zong_arr.length>5){
+                this.page_arr=[zong_arr.length-4,zong_arr.length-3,zong_arr.length-2,zong_arr.length-1,zong_arr.length]
+            }
             this.page_index=this.zong_arr.length
                 this.page=this.zong_arr.length
         },

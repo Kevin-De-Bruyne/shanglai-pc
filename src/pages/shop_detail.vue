@@ -48,16 +48,21 @@
 export default {
     created () {
       this.getdata()
-      this.getuser()
+    //   this.getuser()
     },
     data(){
         return{
             id:this.$route.query.id,
-            data:{}
+            data:{},
+            is_p:''
         }
     },
     methods: {
         buyshop(){
+            if(this.is_p==1){
+                this.showtitle('余额不足')
+                return 
+            }
             this.ajax({
                 url:'index/auction_goods/buy_auction_goods',
                 data:{
@@ -83,9 +88,22 @@ export default {
                
             }).catch(err=>{
              console.log(err)
-            this.showtitle(err.message).then(res=>{
-                this.$router.go(-1)
-            })
+             let msg=err.message||err.msg||err.data.message||err.data.msg
+             if(msg=='你还未实名认证,请先认证后再抢拍'){
+                 this.$dialog.confirm({
+                    title: '提示',
+                    message: '依《尚来拍卖》相关要求，会员必须实名认证才可进行购买。',
+                    })
+                    .then(() => {
+                        this.$router.push('/wanshan')
+                    })
+                    .catch(() => {
+                        this.$router.go(-1)
+                    });
+             }
+            // this.showtitle(msg).then(res=>{
+            //     this.$router.go(-1)
+            // })
             })
         },
         getuser(){
@@ -95,16 +113,7 @@ export default {
                 if(res.user.is_certification){
                     return
                 }
-                   this.$dialog.confirm({
-                    title: '提示',
-                    message: '依《沪上云拍》相关要求，会员必须实名认证才可进行购买。',
-                    })
-                    .then(() => {
-                        this.$router.push('/wanshan')
-                    })
-                    .catch(() => {
-                        // on cancel
-                    });
+                   
             })
         }
     },
@@ -112,6 +121,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .tuwen-title{
     text-align: center;
     line-height: 50px;
@@ -176,14 +186,22 @@ export default {
         }
     }
 }
+
     .my-swipe{
-        height: 300px;
-        
+       font-size: 0;
+        /deep/.van-swipe__track{
+             display: flex;
+        align-items: center;
+        justify-content: center;
+        }
         img{
-            max-width: 100%;
-            max-height: 100%;
+            // object-fit: contain;
+            width: 100%;
+            height: 100%;
+            // display: none;
+            // max-width: 50% !important;
+            // height: auto;
             // width: 100%;
-            margin: auto;
         }
     }
     .items{

@@ -7,7 +7,7 @@
       <headers title="首页" noback="true" />
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item,index) in data.slide_show" :key="index">
-          <img :src="item.img" alt="">
+          <img :src="item.img" @click="gourl(item)" alt="">
       </van-swipe-item>
     </van-swipe>
     <div class="nav-list">
@@ -15,13 +15,14 @@
       @click="navgo(item)"
       >
         <div class="top">
-          <span class="iconfont" :class="item.icon"></span>
+          <span class="iconfont" :class="item.icon"></span> 
         </div>
         <div class="bottom">
           {{item.name}}
         </div>
       </div>
     </div>
+
     
 
     <div class="item-box">
@@ -31,17 +32,24 @@
            {{item.txt}}
          </div>
          <div class="time-title">
-           <!-- {{item.start_time}}-{{item.end_time}} -->
+           
+           <div>
+             {{item.start_time}}-{{item.end_time}}
+           </div>
+           <div>
+              {{item.week_name}}
+           </div>
          </div>
+         
       </div>
     </div>
-    <tabbar />
+    <tabbar s="s" />
     </template>
 
      <popup :shows="box_show">
             <div class="white-box">
                 <div class="title">
-                    沪上云拍
+                    尚来拍卖
                 </div>
                 <div class="neirong">
                   尊敬的会员您好：平台为增加新注册用户的交易体验，特免去首单交易服务费（仅限首单）有效期为新用户注册时
@@ -57,31 +65,43 @@
             </div>
         </popup>
 
-    
+    <router-view></router-view>
     
     <!-- <template v-else>
       <div class="loadding-box">
         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" alt="">
       </div>
     </template> -->
+    {{mytoken}}
   </div>
 </template>
 
+
+
 <script>
+import child  from '@/components/child'
 export default {
   created() {
-    console.clear()
-    console.log(document.baseURI)
-    console.log(this.$route)
-   
-
+    if(this.mytoken){
+      localStorage.setItem('login',this.mytoken)
+    }
     this.getdata()
+  },
+  mounted() {
+
+  },
+  provide:{
+    name:'zzzzzzzzzzzz'
+  },
+  components:{
+    child
   },
   setup(){
     console.log('setup')
   },
-data(){
+data(){ 
   return{
+    mytoken:this.$route.query.token||'',
     box_show:false,
     data:{},
     nav_list:[
@@ -109,6 +129,22 @@ data(){
   }
 },
 methods: {
+  test1(e){
+    console.log(e)
+  },
+  test2(e){
+    console.log(e)
+  },
+  gourl(item){
+    if(!item.url){
+      return
+    }
+    if(item.url.indexOf('/')==0){
+      this.$router.push(item.url)
+    }else{
+      location.href=item.url
+    }
+  },
   queren(){
     this.box_show=false
   },
@@ -120,6 +156,7 @@ methods: {
       url:'index/auction_goods/index'
     }).then(res=>{
       this.data=res
+
        if(this.data.day){
          this.box_show=true
        }else{
@@ -260,9 +297,14 @@ methods: {
    }
 }
 .my-swipe{
-     height: 160px;
+    //  height: 160px;
      border-radius: 6px;
      overflow: hidden;
+     /deep/.van-swipe__track{
+        display: flex;
+     align-items: center;
+     justify-content: center;
+     }
      img{
        width: 100%;
        height: 100%;

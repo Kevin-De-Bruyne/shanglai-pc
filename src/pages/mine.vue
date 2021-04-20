@@ -4,7 +4,7 @@
          
          <div class="user-box">
              <div class="user">
-                 <div class="left" @click="choise_img()">
+                 <div class="left">
                      <img :src="url+data.avatar+'?'+new Date().getTime().toString()" alt="">
                  </div>
                  <div class="container">
@@ -26,18 +26,18 @@
          <div class="uc-box">
              <div class="item border" @click="$router.push('/uc_list')">
                  <div class="top">
-                     可用UC币
+                     余额
                  </div>
                  <div class="bottom">
                      {{data.user_money}}
                  </div>
              </div>
-             <div class="item right" @click="pushurl('/uc_zhuan')">
+             <div class="item right" @click="pushurl('/uc_list')">
                  <div class="top">
-                     <span class="iconfont icon-icon-class-b"></span>
+                    佣金
                  </div>
                  <div class="bottom">
-                     UC币互转
+                     {{data.surplus_comm||0}}
                  </div>
              </div>
          </div>
@@ -68,32 +68,37 @@ export default {
                 name:'我的买单',
                 img:require('../assets/buy_order.png'),
                 url:'/order_buy'
-            },
+            },  
             {
                 name:'我的卖单',
                 img:require('../assets/order.png'),
                 url:'/order_sell'
             },
-            {
-                name:'抵用券',
-                img:require('../assets/youhui2.png'),
-                url:'/diyong'
-            },
+            // {
+            //     name:'抵用券',
+            //     img:require('../assets/youhui2.png'),
+            //     url:'/diyong'
+            // },
             {
                 name:'提货订单',
                 img:require('../assets/order2.png'),
                 border:'none',
                 url:'/order_shiwu'
             },
-            {
-                name:'云商订单',
-                img:require('../assets/order2.png'),
-                border:'none'
-            },
+            // {
+            //     name:'云商订单',
+            //     img:require('../assets/order2.png'),
+            //     border:'none'
+            // },
             {
                 name:'我的团队',
                 img:require('../assets/team.png'),
                 url:'/team'
+            },
+            {
+                name:'我的好友',
+                img:require('../assets/team.png'),
+                url:'/haoyou_list'
             },
             {
                 name:'邀请好友',
@@ -107,10 +112,15 @@ export default {
                 url:'/xinren'
             },
             {
+                name:'意见反馈',
+                img:require('../assets/kefu.png'),
+                url:'/kefu'
+            },
+            {
                 name:'在线客服',
                 img:require('../assets/kefu.png'),
                 border:'none',
-                url:'/kefu'
+                url:'/lianxi'
             },
             {
                 name:'我的收款方式',
@@ -189,7 +199,7 @@ export default {
             })
                      this.$dialog.confirm({
                     title: '提示',
-                    message: '依《沪上云拍》相关要求，会员必须实名认证。',
+                    message: '依《尚来拍卖》相关要求，会员必须实名认证。',
                     })
                     .then(() => {
                         this.$router.push('/wanshan')
@@ -259,6 +269,7 @@ export default {
     background: white;
     text-align: center;
     height: 70px;
+    margin: 0 0 10px 0;
     .item{
         flex: 1;
         display: flex;
@@ -270,6 +281,7 @@ export default {
             justify-content: center;
         }
         .bottom{
+            border-left: 1px solid #eee;
             font-size: 18px;
             color: #000;
             font-weight: bold;
@@ -287,7 +299,6 @@ export default {
    .border{
        border-right: 1px solid #eee;
        .top{
-           color: #999;
        }
        
    }

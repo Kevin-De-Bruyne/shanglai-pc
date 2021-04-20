@@ -83,6 +83,10 @@
           <van-uploader  ref="fileList_wx" v-else v-model="fileList_wx" max-count="1"  />   
            
         </div>
+        <div class="ipt-box">
+            <span>微信账号</span>
+            <input type="text" v-model="data.wechat_account" placeholder="请输入微信账号">
+            </div>
          <!-- <div class="ipt-box">
             <span>支付宝账号</span>
             <input type="text" placeholder="请输入银行卡号">
@@ -134,6 +138,7 @@
 export default {
     data(){
         return{
+            wxname:'',
             code:'',
             phone:'',
             bank:{},
@@ -254,7 +259,7 @@ export default {
                     zhifubao:this.fileList_zf[0].content,
                     wechat:this.fileList_wx[0].content,
                      bank_id:this.data.bank_id,
-                    
+                    wechat_account:this.data.wechat_account,
                 }
                 }).then(res=>{
                     this.showtitle('修改成功').then(res=>{

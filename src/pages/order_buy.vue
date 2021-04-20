@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <headers @routerback="backs" choise_back="true" title="我的买单" />
+    <headers  title="我的买单" />
 
     <div class="tabbar-box">
       <div
@@ -61,7 +61,14 @@
           <div class="text1">实付</div>
           <div class="text2 red">￥{{ item.total_money }}</div>
         </div>
-        <div class="bottom" v-if="item.status == 0">
+        <div class="bottom" v-if="item.b_status == -2">
+          <div class="left flex">
+            
+          </div>
+          <div class="right butn2" @click.stop="tihuo(item)">提货</div>
+          <div class="right butn2" @click.stop="shangjia(item)">重新提交上架</div>
+        </div>
+        <div class="bottom" v-else-if="item.status == 0">
           <div class="left flex">
             请在<van-count-down class="" :time="item.times" />秒内完成付款
           </div>
@@ -69,7 +76,10 @@
         </div>
         <div class="bottom" v-else-if="item.status == -1">
           <div class="left">倒计时<van-count-down :time="item.times" /></div>
+          <div class="right">
+            <div class="right butn2 m-r-5" @click.stop="look_liyou(item)">查看拒绝理由</div>
           <div class="right butn2" @click.stop="fukuan(item)">再次提交付款</div>
+          </div>
         </div>
         <div class="bottom" v-else-if="item.status == 1">
           <div class="left">
@@ -100,30 +110,102 @@
         </div>
       </div>
     </div>
+
+    <van-dialog v-model="zhuanpai_show" title="尚来拍卖"
+    @confirm="zhuanpai_submit" :before-close="onbefor"
+    @cancel="zhuanpai_show=false"
+     show-cancel-button>
+      <div class="zhuanpai_box" v-if="zhuanpai_text">
+        根据《拍卖规则》，您在转拍前需支付该商品购买价的
+        <span class="red"> {{zhuanpai_text.proportion}}%</span>
+        作为委托拍卖手续费，支付前请确认如下信息: 您的购买价为: 
+        <span class="red">{{zhuanpai_text.pay_money}}元</span>，
+        
+        <!-- 您的转拍单价为: <span class="red">{{zhuanpai_text.price}}元</span> -->
+        您需支付的手续费为
+        <span class="red">{{zhuanpai_text.fee_d}}元</span>
+        (提示: 请在支付前确认您的余额大于<span class="red">{{zhuanpai_text.fee_d}}元</span>，方可转拍成功)
+        <div class="tishi-text">
+          {{`请输入转拍商品的拍卖价格(最高${zhuanpai_text.max}元)`}}
+        </div>
+      </div>
+      <div class="zhuanpai_box" v-else>
+        由于您是新人会员享有首单全免服务费
+      </div>
+      <input type="text" v-model="zhuanpai_price" class="name_ipt" :placeholder="`${zhuanpai_text.max}`" />
+    </van-dialog>
+
   </div>
 </template>
 
 <script>
+import bus from '../assets/js/bus'
 export default {
   data() {
     return {
       // tabbar:['全部','待付款','付款中','已付款','已转拍','已提货','已取消'],
-      tabbar: ["当天", "三天内", "七天内", "一个月内"],
+      tabbar: [ "三天内", "七天内", "一个月内"],
       tabbar_index: 0,
       data: [],
       hours: "",
+      zhuanpai_text:{},
+      zhuanpai_show:false,
+      zhuanpai_show2:false,
+      zhuanpai_price:'',
+      zhuanpai_id:'',
+      now_id:'',
+      now_item:{}
     };
   },
   created() {
     this.getdata();
+    bus.$on('choise_res',(id)=>{
+      console.log(id,'jfiajfiajfi')
+      bus.$off('choise_res')
+      let url=this.now_item.b_status==-2?'index/auction_goods/apply_pick_up_goods_to_transfer':'index/auction_goods/apply_pick_up_goods'
+      this.ajax({
+            url: url,
+            data: {
+              address_id:id,
+              order_id: this.now_id,
+            },
+          }).then((res) => {
+            
+
+            this.$dialog.alert({
+                title: '提示',
+                message: '提货成功',
+            }).then(() => {
+                this.getdata();
+            });
+
+          });
+      
+        })
+  },
+  beforeRouteLeave(to,from,next){
+    console.log('啊哈哈哈',to)
+    if(to.matched[0].path=='/conpay'){
+      console.log('返回个人中心')
+      next('/mine')
+    }
+    next()
   },
   computed: {
     saixuan_data() {
       let data = [];
-
+      
       data = this.data.filter((item) => {
-        return item.time_status <= this.tabbar_index + 1;
+        
+        if(this.tabbar_index==0){
+          return item.time_status <= this.tabbar_index + 2;
+        }else if(this.tabbar_index==1){
+          return item.time_status <= this.tabbar_index + 3;
+        }else{
+          return item.time_status <= this.tabbar_index + 4;
+        }
       });
+      console.log(data)
 
       // let data=[]
       // if(this.tabbar_index==0){
@@ -141,7 +223,34 @@ export default {
       return data;
     },
   },
+  activated(){
+    console.log('这是什么什么周期')
+    
+  },
   methods: {
+    shangjia(item){
+            this.ajax({
+                url:'index/auction_goods/algin_submit',
+                data:{
+                    id:item.id
+                }
+            }).then(res=>{
+                this.showtitle('操作成功').then(res=>{
+                    this.getdata()
+                })
+            })
+        },
+    look_liyou(item){
+      this.$dialog.alert({
+  title: '拒绝理由',
+  message: item.reason,
+}).then(() => {
+  // on close
+});
+    },
+    onbefor(active,down){
+      return down(false)
+    },
     zhuan_data(id) {
       return new Promise((ok, err) => {
         this.ajax({
@@ -183,103 +292,61 @@ export default {
       }
       return str;
     },
-    totimes(item) {
-      let now = new Date().getTime().toString().substring(0, 10) + "00";
-      let s = item.create_time1 - now;
-      console.log(s);
-      return Number(s + "000");
-    },
-    backs() {
-      console.log(this.order_back);
-      if (this.order_back) {
-        this.order_backtofalse();
-        this.order_back = false;
-        this.$router.push("/mine");
-      } else {
-        this.$router.go(-1);
-      }
-    },
     daojishi(item) {},
     tihuo(item) {
-      this.$dialog
-        .confirm({
-          title: "提示",
-          message: "是否提货？",
-        })
-        .then(() => {
-          this.ajax({
-            url: "index/auction_goods/apply_pick_up_goods",
-            data: {
-              order_id: item.id,
-            },
-          }).then((res) => {
-            this.getdata();
-
-            this.$dialog.alert({
-                title: '提示',
-                message: '提货成功',
-            }).then(() => {
-  
-            });
-
-          });
-        })
-        .catch(() => {
-          // on cancel
-        });
+      // this.$emit('choise_res','jifajifjaifjai')
+      // return
+      this.now_item=item
+      this.now_id=item.id
+      this.$router.push('/addres_list?order=true').then(res=>{
+        setTimeout(() => {
+           this.showtitle('请选择收货地址')
+        }, 200);
+      })
+      // this.showtitle('请选择收货地址').then(res=>{
+      //   this.$router.push('/addres_list')
+      // })
+      
     },
     zhuanpai(item) {
-      
+      this.zhuanpai_id=item.id
       this.zhuan_data(item.id).then((req) => {
-        if (req.ss == 0) {
-          this.$dialog
-            .confirm({
-              title: "沪上云拍",
-              confirmButtonText: "确认转拍",
-              message: "由于您是新人会员享有首单全免服务费",
-            })
-            .then(() => {
-              this.ajax({
-                url: "index/auction_goods/apply_transfer",
-                data: {
-                  order_id: item.id,
-                },
-              }).then((res) => {
-                this.getdata();
-                this.showtitle("转拍成功");
-              });
-            })
-            .catch(() => {
-              // on cancel
-            });
-        } else {
-          this.$dialog
-            .confirm({
-              title: "沪上云拍",
-              confirmButtonText: "确认转拍",
-              message: `根据《拍卖规则》，您在转拍前需支付买入价的${req.proportion}%作为拍卖手续费，支付前请确认如下信息: 您的购买单价为: ${req.pay_money}元，您的转拍单价为: ${req.price}元，您实付的拍卖手续费为${req.fee_d}UC币(提示: 请在支付前确认您的UC币大于${req.fee_d}，方可转拍成功)`,
-            })
-            .then(() => {
-              this.ajax({
-                url: "index/auction_goods/apply_transfer",
-                data: {
-                  order_id: item.id,
-                },
-              }).then((res) => {
-                this.getdata();
-                this.showtitle("转拍成功");
-              });
-            })
-            .catch(() => {
-              // on cancel
-            });
+        if (req.ss != 0) {
+          this.zhuanpai_text=req
         }
-        console.log(req);
+         this.zhuanpai_show=true
       });
+    },
+    zhuanpai_submit(){
+      this.$dialog.confirm({
+        title: '提示',
+        message: `您以${this.zhuanpai_price||this.zhuanpai_text.max}元的价格转拍此商品，是否继续?`,
+      })
+      .then(() => {
+        this.ajax({
+                url: "index/auction_goods/apply_transfer",
+                data: {
+                  order_id: this.zhuanpai_id,
+                  goods_price:this.zhuanpai_price||this.zhuanpai_text.max
+                },
+              }).then((res) => {
+                this.zhuanpai_show=false
+                this.showtitle("转拍成功").then(res=>{
+                  this.getdata();
+                })
+              });
+      })
+      .catch(() => {
+        // on cancel
+      })
+      
     },
     getdata() {
       this.ajax({
         url: "index/my/my_buy_order",
+        data:{
+          arr:['jifajifjaifaij']
+        }
       }).then((res) => {
         this.data = res.list;
         this.hours = res.stream_beat_time;
@@ -288,12 +355,18 @@ export default {
     },
     totimes() {
       this.data.forEach((item) => {
-        let endtime = Number(item.create_time1) + Number(this.hours);
-        item.create_time1 = Number(endtime.toString() + "000");
+        var t
+        if(item.status==-1){
+          t=item.examine_time
+        }else{
+          t=item.create_time1
+        }
+        let endtime = Number(t) + Number(this.hours);
+        t = Number(endtime.toString() + "000");
 
         let date = new Date().getTime();
-        this.$set(item, "times", item.create_time1 - date);
-        console.log(item.create_time1, item.times, date);
+        this.$set(item, "times", t - date);
+        console.log(t, item.times, date);
 
         // let z= s.toString()
       });
@@ -306,8 +379,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tishi-text{
+  text-align: center;
+  line-height: 30px;
+  color: #999;
+  margin: 10px 0 0 0;
+}
+.zhuanpai_box{
+  box-sizing: border-box;
+  padding: 15px;
+  font-size: 14px;
+}
+.name_ipt{
+    text-align: center;
+    height: 60px;
+    font-size: 14px;
+    width: 100%;
+}
 .flex {
   display: flex;
+}
+.red{
+  color: red !important;
 }
 .bottom_text {
   display: flex;
@@ -325,10 +418,12 @@ export default {
     height: 100px;
     width: 100px;
     margin: 0 10px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   img {
-    width: 100%;
-    height: 100%;
+    
   }
 }
 .item-box {

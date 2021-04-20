@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import {Toast} from 'vant'
 export default {
     data(){
         return{
@@ -59,6 +60,7 @@ export default {
         }
     },
     created() {
+       
         this.getshen()
         if(this.id){
             this.getdata()

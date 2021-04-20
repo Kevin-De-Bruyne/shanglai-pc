@@ -69,6 +69,10 @@ export default {
     },
     methods: {
         submit(){
+            if(!this.fileList.length){
+                this.showtitle('请先上传支付凭证')
+                return
+            }
             this.z=true
             this.order_back=true
             console.log(this)
@@ -81,7 +85,6 @@ export default {
                 }
             }).then(res=>{
                 this.showtitle('提交成功，请等待卖家审核').then(res=>{
-                        this.order_backtoTrue()
                     this.$router.push('/order_buy')
                 })
             })

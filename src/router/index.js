@@ -20,6 +20,7 @@ import shop_list from '../pages/shop_list'
 import shop_detail from '../pages/shop_detail'
 import shoukuan from '../pages/shoukuan'
 import team from '../pages/team'
+import haoyou_list from '../pages/haoyou_list'
 import login from '../pages/login'
 import reg from '../pages/reg'
 import reg_h5 from '../pages/reg_h5'
@@ -40,6 +41,12 @@ import xiazai from '../pages/xiazai'
 import order_detail from '../pages/order_detail'
 import order_detail_sell from '@/pages/order_detail_sell'
 import test from '@/pages/test'
+import tx from '@/pages/tx'
+import bank_add from '@/pages/bank_add'
+import bank_list from '@/pages/bank_list'
+import lianxi from '@/pages/lianxi'
+import chongzhi from '@/pages/chongzhi'
+import mingxi from '@/pages/mingxi'
 
 Vue.use(Router)
 
@@ -50,7 +57,7 @@ export default new Router({
           component:home,
           meta:{
             index:0
-          }
+          },
         },
         {
           path:'/xiazai',
@@ -64,6 +71,41 @@ export default new Router({
           component:shops,
           meta:{
             index:0
+          }
+        },
+        {
+          path:'/mingxi',
+          component:mingxi,
+          meta:{
+            index:2
+          }
+        },
+        {
+          path:'/bank_list',
+          component:bank_list,
+          meta:{
+            index:0
+          }
+        },
+        {
+          path:'/lianxi',
+          component:lianxi,
+          meta:{
+            index:1
+          }
+        },
+        {
+          path:'/bank_add',
+          component:bank_add,
+          meta:{
+            index:0
+          }
+        },
+        {
+          path:'/chongzhi',
+          component:chongzhi,
+          meta:{
+            index:2
           }
         },
         {
@@ -85,6 +127,13 @@ export default new Router({
           component:reg_h5,
           meta:{
             index:0
+          }
+        },
+        {
+          path:'/tx',
+          component:tx,
+          meta:{
+            index:2
           }
         },
         {
@@ -266,6 +315,13 @@ export default new Router({
         {
           path:'/team',
           component:team,
+          meta:{
+            index:1
+          }
+        },
+        {
+          path:'/haoyou_list',
+          component:haoyou_list,
           meta:{
             index:1
           }

@@ -4,7 +4,7 @@
 
 
         <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(item,index) in data" :key="index">
+      <van-swipe-item v-for="(item,index) in data.info" :key="index">
           <img :src="item||'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='" alt="">
       </van-swipe-item>
     </van-swipe>
@@ -16,7 +16,7 @@
 
         <div class="text-box">
             <div class="text1">
-                1、新注册会员可申请体验三天;
+                1、新注册会员可申请体验{{data.vip_exp}}天;
             </div>
             <div class="text2">
                 2、体验期间每场可提前三分钟进场，每场限拍一单;
@@ -65,7 +65,7 @@ export default {
             this.ajax({
                 url:'index/my/application_core_page'
             }).then(res=>{
-                this.data=res.info
+                this.data=res
             })
         }
     },

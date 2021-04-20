@@ -2,12 +2,6 @@
     <div class="content">
         <headers title="实名认证" />
 
-        
-      
-     
-
-      
-
       <template v-if="active==0">
           <div class="ipt-box">
           <span>真实姓名</span>

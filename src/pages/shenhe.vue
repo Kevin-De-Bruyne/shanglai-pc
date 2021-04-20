@@ -248,7 +248,7 @@
 
                 <div class="neirong">
                    请核对是否已收到相关款项，点击
-                    确认故货后，均视为已收到款，如
+                    确认放货后，均视为已收到款，如
                 未收到款，却点击了放货的，
                 产生的损失由卖家自行承担!!
                 </div>
@@ -257,7 +257,7 @@
                 </div>
                 <div class="butn-box">
                     <div class="butn1" @click="box_show=false">
-                        取消
+                            取消
                     </div>
                     <div class="butn2" @click="submit2()">
                         确认放货
@@ -276,12 +276,12 @@ export default {
     data(){
         return{
             box_show:false,
-            submit_text:'拒绝通过，提交审核',
+            submit_text:'提交',
             beizhu:'',
             id:this.$route.query.id,
             data:{},
             status:this.$route.query.status,
-            radio:"1",
+            radio:"2",
             pay_img_show:false,
             checked:true
         }
@@ -306,6 +306,14 @@ export default {
            
         },
         submit2(){
+            if(this.radio=='1'&&!this.beizhu){
+                this.showtitle('请填写备注信息')
+                return
+            }
+            if(this.radio=='2'&&!this.checked){
+                this.showtitle('请勾选协议')
+                return 
+            }
              this.ajax({
                 url:'index/auction_goods/audit_payment',
                 data:{

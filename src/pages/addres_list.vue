@@ -3,7 +3,9 @@
     <headers title="我的收货地址" />
 
     <div class="item-box">
-      <div class="item" v-for="(item) in data" :key="item.address_id">
+      <div class="item" v-for="(item) in data" :key="item.address_id"
+      @click="choise_res(item)"
+      >
         <div class="top">
           <div class="left">
             <div class="text1">
@@ -32,16 +34,25 @@
 </template>
 
 <script>
+import bus from '../assets/js/bus'
 export default {
   data() {
     return {
-      data: []
+      data: [],
+      order:this.$route.query.order||false
     };
   },
   created() {
     this.getdata();
   },
   methods: {
+    choise_res(item){
+      if(this.order){
+        
+bus.$emit('choise_res',item.address_id)
+      this.$router.go(-1)
+      }
+    },
     gobj(item) {
       this.$router.push("/addres_add?id="+item.address_id);
     },

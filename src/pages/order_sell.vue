@@ -63,6 +63,13 @@
                     </div>
                    
                 </div>
+                <!-- <div class="bottom" v-if="item.status==-2">
+                    <div class="left">
+                    </div>
+                    <div class="right" @click.stop="shangjia(item)">
+                        重新提交上架
+                    </div>
+                </div> -->
                  <div class="bottom_text" v-if="item.pay_money">
                         <div class="text1">
                             实付
@@ -92,11 +99,15 @@
                         确认发货
                     </div>
                 </div>
+
                 <div class="bottom" v-else-if="item.order_id">
                     <div class="left">
                         
                     </div>
                     <div class="rights">
+                        <span class="butn2 m-r-5" v-if="item.order.status==-1" @click.stop="showjvjue(item)">
+                            查看拒绝理由
+                        </span>
                         <span class="butn2" @click.stop="godetail(item)">
                             订单详情
                         </span>
@@ -145,7 +156,7 @@ export default {
             //         id:4
             //     },
             // ],
-            tabbar:['当天','三天内','七天内','一个月内'],
+            tabbar:['三天内','七天内','一个月内'],
             tabbar_index:0,
             data:[]
         }
@@ -184,21 +195,49 @@ export default {
             let data=[]
 
             data=this.data.filter(item=>{
-                return item.time_status<=this.tabbar_index+1
+                 if(this.tabbar_index==0){
+          return item.time_status <= this.tabbar_index + 2;
+        }else if(this.tabbar_index==1){
+          return item.time_status <= this.tabbar_index + 3;
+        }else{
+          return item.time_status <= this.tabbar_index + 4;
+        }
             })
                 return data
         }
     },
     methods: {
+        shangjia(item){
+            this.ajax({
+                url:'index/auction_goods/algin_submit',
+                data:{
+                    id:item.id
+                }
+            }).then(res=>{
+                this.showtitle('操作成功').then(res=>{
+                    this.getdata()
+                })
+            })
+        },
         godetail(item){
             if(!item.order_id){
                 return
             }
             this.$router.push(`/order_detail_sell?id=${item.order_id}&status=${this.check_status(item)}`)
         },
+        showjvjue(item){
+            this.$dialog.alert({
+                title:'尚来艺拍',
+                message:item.order.reason
+            })
+        },
          check_status(item){
             let str=''
-            if(item.b_sta==5){
+            if(item.b_sta==-1){
+                str='审核拒绝'
+            }else if(item.b_sta==-2){
+                str='拒绝上架'
+            }else if(item.b_sta==5){
                 str='已取消'
             }else if(item.sta==2){
                 str='待收货'
@@ -207,7 +246,32 @@ export default {
             }else if(item.status==3&&item.b_sta==2){
                 str='待发货'
             }else{
-                str='待被买'
+                switch (item.status) {
+                    case -2:
+                        str='已拒绝上架'
+                        break;
+                    case -1:
+                        str='申请中'
+                        break
+                    case 0:
+                        str='已通过'
+                        break
+                    case 1:
+                        str='已上架'
+                        break
+                    case 2:
+                        str='已拍下'
+                        break
+                    case 3:
+                        str='已付款'
+                        break
+                    case 4:
+                        str='已完成'
+                        break
+                    case 5:
+                        str='已提货'
+                        break
+                }
             }
           return str
         },
@@ -216,7 +280,7 @@ export default {
         },
         suodan(item){
             this.$dialog.confirm({
-                    title: '提示',
+                    title: '提示：锁单后将阻止系统自动放货，继续等待买家付款',
                  message: '是否确认锁单?',
                     })
                     .then(() => {

@@ -25,13 +25,13 @@ export default {
                 img:require('../assets/home2.png'),
                 img_chose:require('../assets/home.png'),
             },
-            {
-                name:'云商商城',
-                url:'/shops',
-                img:require('../assets/shop2.png'),
-                img_chose:require('../assets/shop.png'),
-                nologin:true
-            },
+            // {
+            //     name:'云商商城',
+            //     url:'/shops',
+            //     img:require('../assets/shop2.png'),
+            //     img_chose:require('../assets/shop.png'),
+            //     nologin:true
+            // },
             {
                 name:'我的',
                 url:'/mine',
@@ -40,6 +40,9 @@ export default {
             }
             ]
         }
+    },
+    created() {
+        console.log(this.$attrs)
     },
     methods: {
         gourl(item){

@@ -143,15 +143,15 @@
       <div class="uoload-box">
           <van-uploader v-model="fileList_wx" max-count="1"  />
       </div>
-          <!-- <div class="ipt-box">
+           <div class="ipt-box">
           <span>微信账号</span>
-          <input type="text" v-model="user.wx" placeholder="请输入微信账号">
+          <input type="text" v-model="user.wxname" placeholder="请输入微信账号">
       </div>
        
-        <div class="ipt-box">
+        <!-- <div class="ipt-box">
           <span>微信姓名</span>
           <input type="text" v-model="user.wx_name" placeholder="请输入微信姓名">
-      </div> -->
+      </div>  -->
      
       </template>
 
@@ -166,8 +166,8 @@
           </div>
       </template>
 
-      
-    <div class="butn-box">
+    <template v-if="active!=4">
+       <div class="butn-box">
         <div class="butn" @click.stop="next()">
          {{active==0?'验证身份,并继续':'确认提交,下一步'}}
         </div>
@@ -175,6 +175,8 @@
             上一步
         </div>
     </div>
+    </template>
+    
      
 
     </div>
@@ -225,8 +227,85 @@ export default {
         change_step(e){
             console.log(e)
         },
-        next(){
+       async next(){
+            let {user}=this
+            let next=null
+            let card=/^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+            if(this.active==0){
+                if(!user.card_name){
+                    this.showtitle('真实姓名不能为空')
+                    return
+                }
+                if(!user.card){
+                    this.showtitle('身份证号不能为空')
+                    return
+                }
+                if(!card.test(user.card)){
+                    this.showtitle('身份证格式不正确')
+                    return
+                }
+                if(!this.fileList_card_zheng.length){
+                    this.showtitle('请上传身份证正面照')
+                    return
+                }
+                if(!this.fileList_card_fan.length){
+                    this.showtitle('请上传身份证反面照')
+                    return
+                }
+            }
+            if(this.active==1){
+                if(!user.bank_for){
+                    return this.showtitle('请输入所属银行')
+                }
+                if(!user.bank_name){
+                    return this.showtitle('请输入开户行')
+                }
+                if(!user.bank_card){
+                    return this.showtitle('请输入银行卡号')
+                }
+                if(!user.bank_username){
+                    return this.showtitle('请输入持卡人')
+                }
+                 function  testcode(){
+                     return this.ajax({
+                            url:'index/my/real_name_authentication_varyif_phone',
+                            data:{
+                                code:user.code
+                            }
+                          }).then(res=>{
+                              next=true
+                          }).catch(err=>{
+                              next=false
+                          })
+                }
+                if(!user.code){
+                    return this.showtitle('请输入验证码')
+                }else{
+                   await testcode.call(this)
+                    console.log(next)
+                    if(!next){
+                        return
+                    }
+                }
+                if(!this.bank_card.length){
+                    return this.showtitle('请输入银行卡照片')
+                }
+            }
+            if(this.active==2){
+                if(!this.fileList_zhifubao.length){
+                    return this.showtitle('请上传支付宝收款码')
+                }
+            }
+            if(this.active==3){
+                 if(!this.fileList_wx.length){
+                    return this.showtitle('请上传微信收款码')
+                }
+                if(!user.wxname){
+                    return this.showtitle('请填写微信号')
+                }
+            }
             if(this.active<3){
+               
                 if(this.active==0&&this.user.card_name){
                     this.$dialog.confirm({
   title: '提示',
@@ -248,7 +327,6 @@ export default {
                 this.steps.scrollTo(150*this.active,0)
                 return
             }
-            let {user} = this
             console.log(user)
             
             if(!user.card_name){
@@ -330,6 +408,7 @@ export default {
                     bank_name:user.bank_for, //所属银行
                     bank_branch:user.bank_name,
                     bank_num:user.bank_card, //银行卡号码
+                    wechat_account:user.wxname,
                     bank_username:user.bank_username, // 银行持卡人
                     // bank_phone:user.bank_phone, //银行卡手机号码
                     zhifubao:this.fileList_zhifubao[0].content, //支付宝收款码
@@ -349,8 +428,10 @@ export default {
                 console.log('返回')
                 return
             }
+            // let url='index/my/send'
+            let url='index/my/send'
              this.ajax({
-                url:'index/my/send',
+                url:url,
                 data:{
                     // mobile:user.phone
                 }

@@ -11,7 +11,7 @@
         </div>
 
         <div class="item-box">
-            <div class="item" v-for="(item,index) in srach_data" :key="index">
+            <div class="item" v-for="(item,index) in data" :key="index">
                 <div class="top">
                     <div class="container">
                         <div class="text1">{{item.money}}元</div>
@@ -75,10 +75,19 @@ export default {
             return data
         }
     },
+    watch:{
+        tabbar_index(news){
+            this.getdata()
+        }
+    },
     methods: {
        getdata(){
+           
            this.ajax({
-               url:'index/my/my_offset_roll'
+               url:'index/my/my_offset_roll',
+               data:{  
+                   status:Number(this.tabbar_index)+1
+               }
            }).then(res=>{
                this.data=res.info
                this.data.forEach(item=>{

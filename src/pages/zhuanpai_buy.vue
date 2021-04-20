@@ -115,6 +115,15 @@
                         </div>
                         <div class="text2">
                             <div class="left">
+                                开户行
+                            </div>
+                            <div class="right">
+                                {{data.info.bank_branch}}
+                                <span class="iconfont icon-copy" @click="copy(data.info.bank_num)"></span>
+                            </div>
+                        </div>
+                        <div class="text2">
+                            <div class="left">
                                 持卡人
                             </div>
                             <div class="right">
@@ -243,7 +252,7 @@ export default {
             img_zhifu:[require('../assets/zhifubao.png')],
             active:1,
             time_bar:['下订单','去线下付款','点击已付款','待放货'],
-            choise_arr:['支付宝','银联','微信','抵用卷'],
+            choise_arr:['支付宝','银行卡','微信'],
             choise_index:1,
             data:{},
             id:this.$route.query.id,
@@ -307,6 +316,9 @@ export default {
                 }
             }).then(res=>{
                 this.data=res
+                if(this.data.num==0){
+                    this.choise_arr.push('抵用券')
+                }
                 let times=null
                 console.log(this.data.order)
                 

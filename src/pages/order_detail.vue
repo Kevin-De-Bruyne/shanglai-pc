@@ -235,6 +235,9 @@ export default {
             if(pay_type==3){
                 s='银行卡'
             }
+            if(pay_type==4){
+                s='优惠券'
+            }
             return s
         }
     },

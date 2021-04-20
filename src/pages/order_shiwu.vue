@@ -24,10 +24,12 @@
           <div class="left">
             <div class="text1">下单时间: {{item.create_time}}</div>
             <div class="text2">商品名: {{item.goods_name}}</div>
+            <div class="text2" v-if="item.shipping_name">物流: {{item.shipping_name}}</div>
+            <div class="text2" v-if="item.invoice_no">物流单号: {{item.invoice_no}}</div>
             <div class="shop-box">
               <div class="lefts">
                 <img
-                  :src="item.main_graph_img"
+                v-lazy="item.main_graph_img"
                   alt
                 />
               </div>
@@ -148,6 +150,9 @@ export default {
   .lefts{
       height: 100px;
   width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 10px 0 0;
   }
   img {

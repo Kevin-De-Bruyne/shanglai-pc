@@ -110,6 +110,7 @@ export default {
   position: fixed !important;
 }
 @import url('./assets/css/default.css');
+@import url('./assets/css/medio.css');
 .test{
   color: red;
   width: 20px;

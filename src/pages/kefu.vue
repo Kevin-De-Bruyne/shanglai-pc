@@ -45,7 +45,17 @@ export default {
             wordfile:[], //文档,
         }
     },
+    created() {
+        this.getdata()
+    },
     methods: {
+        getdata(){
+            this.ajax({
+                url:'index/article/customer_service'
+            }).then(res=>{
+
+            })
+        },
         file_fn(e){
             this.wordfile.push(e.file)
             console.log(this.wordfile)
@@ -61,10 +71,9 @@ export default {
                     moblie:user.phone,
                     email:user.email,
                     path:this.fileList
-                },
-                headers: { 'Content-Type': 'multipart/form-data' }
+                }
             }).then(res=>{
-
+                this.$router.go(-1)
             })
      
             

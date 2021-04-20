@@ -13,7 +13,7 @@
             </div>
             <div class="item">
                 <div class="top">
-                    0
+                    {{data.today_order_all}}
                 </div>
                 <div class="bottom">
                     今日总单量
@@ -85,24 +85,26 @@ export default {
     data(){
         return{
             data:[
-                {
-                    name:'艾莉亚.史塔克',
-                    down:false,
-                    children:[{
-                        name:'珊莎.史塔克',
-                        down:false,
-                        children:[]
-                    }]
-                },
-                {
-                    name:'艾莉亚.史塔克',
-                    down:false,
-                    children:[{
-                        name:'珊莎.史塔克',
-                        down:false,
-                        children:[]
-                    }]
-                },
+                // {
+                //     nick_name:'艾莉亚.史塔克',
+                //     down:false,
+                //     today_order:99,
+                //     children:[{
+                //         nick_name:'珊莎.史塔克',
+                //         today_order:99,
+                //         down:false,
+                //         children:[]
+                //     }]
+                // },
+                // {
+                //     name:'艾莉亚.史塔克',
+                //     down:false,
+                //     children:[{
+                //         name:'珊莎.史塔克',
+                //         down:false,
+                //         children:[]
+                //     }]
+                // },
             ]
         }
     },

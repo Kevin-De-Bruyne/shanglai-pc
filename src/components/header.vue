@@ -14,12 +14,7 @@ export default {
     props:['title','noback','choise_back'],
     methods: {
         goback(){
-            if(this.choise_back){
-                this.$emit('routerback')
-            }else{
-                this.$router.go(-1)
-            }
-            
+            this.$router.go(-1)
         }
     },
 }

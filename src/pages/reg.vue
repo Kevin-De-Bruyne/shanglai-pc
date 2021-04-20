@@ -33,9 +33,20 @@
             <input type="number" v-model="user.yaoqin_code" placeholder="推荐人邀请码(必填)">
         </div>
 
+        <van-popup position="bottom" v-model="tiao_show"> 
+            <div class="mypopup-box" >
+                <div v-html="tiaokuan">
+
+                </div>
+            </div>
+        </van-popup>
+
         <div class="check-box">
             <van-checkbox v-model="checked"></van-checkbox>
-            我已阅读并同意《****注册协议》及《服务条款》
+            我已阅读并同意
+            <span class="blue" @click="gettiaokuan(2)">《用户注册协议》</span>
+            及
+            <span class="blue" @click="gettiaokuan(1)">《隐私政策》</span>
         </div>
 
         <div class="butn" @click="submit()">
@@ -50,14 +61,31 @@
 export default {
     data(){
         return{
+            tiaokuan:'',
             checked:true,
             codetext:'获取验证码',
+            tiao_show:false,
             user:{
                 yaoqin_code:this.$route.query.p_id||''
-            }
+            },
+            mytoken:this.$route.query.token||''
         }
     },
     methods: {
+        gettiaokuan(type){
+            
+            this.ajax({
+                url:'index/publics/get_ag_content',
+                data:{
+                    type
+                }
+            }).then(res=>{
+                this.tiaokuan=res.info.content
+                this.tiao_show=true
+                console.log(this.tiaokuan)  
+                console.log(res)
+            })
+        },
         submit(){
             let {user}=this
             if(!user.phone){
@@ -100,11 +128,20 @@ export default {
                     password:user.password,
                     invite_code:user.yaoqin_code,
                     nick_name:user.username,
-                    trad_password:user.password_jy
+                    trad_password:user.password_jy,
+                    token:this.mytoken
                 }
             }).then(res=>{
-                this.showtitle('注册成功').then(res=>{
-                    this.$router.push('/login')
+                this.showtitle('注册成功').then(()=>{
+                    console.log(res)
+                    if(res.data&&res.data.is_wechat){
+                        console.log('你来到了首页')
+                        localStorage.setItem('login',res.token)
+                        this.$router.push('/')
+                    }else{
+                        this.$router.push('/login')
+                    }
+                    
                 })
             })
 
@@ -137,6 +174,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.mypopup-box{
+    height: 400px;
+    overflow-y: scroll;
+    padding: 15px;
+}
+.blue{
+    color: #0a52c1 !important;
+}
 .check-box{
     margin: 30px 0 0 0;
     display: flex;

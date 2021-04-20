@@ -13,8 +13,14 @@
         
          <div class="container">
              <div class="butn m-t-40" @click="submit()">
-            登录
-        </div>
+                登录
+            </div>
+         </div>
+
+         <div class="text-box" @click.stop="shouquan()" v-if="is_weixin">
+             <div class="text">
+                 微信授权登录
+             </div>
          </div>
         
 
@@ -33,10 +39,22 @@
 export default {
     data(){
         return{
-            user:{}
+            user:{},
+            is_weixin:true
         }
     },
+    created() {
+        // this.is_weixin=this.is_weixnzzz()    
+    },
     methods: {
+         is_weixnzzz(){  
+            var ua = navigator.userAgent.toLowerCase();  
+            if(ua.match(/MicroMessenger/i)=="micromessenger") {  
+                return true;  //在微信中打开
+            } else {  
+                return false;  
+            }  
+        },
         submit(){
             let {user}=this
             if(!user.username){
@@ -60,12 +78,25 @@ export default {
                     this.$router.push('/')
                 })
             })
+        },
+        shouquan(){
+            this.ajax({
+                url:'index/weixin/authorization'
+            }).then(res2=>{
+                window.location.href=res2.url
+                console.log(res2)
+            })
         }
     },
 }
 </script>
 
 <style lang="scss" scoped>
+.text-box{
+    text-align: center;
+    margin: 20px 0;
+    font-size: 12px;
+}
 .content{
     display: flex;
     flex-direction: column;
@@ -81,7 +112,6 @@ export default {
 .logo-img{
     display: block;
     margin: 70px auto;
-    border-radius: 50%;
     width: 100px;
     height: 100px;
 }
